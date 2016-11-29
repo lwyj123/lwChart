@@ -5,6 +5,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <meta name="author" content="Liang Yuyi 2014141463106" />
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="./js/Chart.js"></script>
+    <script type="text/javascript" src="./js/chart.zoom.js"></script>
     <style>
             h2 {
                 border-top: solid cornflowerblue 1px;
@@ -49,6 +51,8 @@
         <div>content2</div>
         <div>content3</div>
     </div>
+    <canvas id="myChart" width="400" height="400"></canvas>
+
 </body>
 <script type="text/javascript">
 //如果只想读取部分数据的话，File对象还有webkitSlice()或mozSlice()方法，用于生成Blob对象。这个对象可以和File对象一样被FileReader读取。这2个方法接收3个参数：第1个参数是起始位置；第2个是结束位置，省略时则读到文件结尾；第3个是content type。例子可以参考《Reading local files in JavaScript》。
@@ -108,8 +112,8 @@ function binstrToDec(binstr) {
 }
 
 function tabFcuntion() {
-    var tabs = document.getElementsByClassName('tab-head')[0].getElementsByTagName('h2'),
-                contents = document.getElementsByClassName('tab-content')[0].getElementsByTagName('div');
+    var tabs = document.getElementsByClassName('tab-head')[0].getElementsByTagName('h2');
+    var contents = document.getElementsByClassName('tab-content')[0].getElementsByTagName('div');
 
     (function changeTab(tab) {
         for(var i = 0, len = tabs.length; i < len; i++) {
@@ -131,6 +135,32 @@ function tabFcuntion() {
 }
 
 tabFcuntion();
+
+
+var ctx = document.getElementById("myChart");
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+
+        }]
+    },
+    options: {
+        zoom: {
+            // Boolean to enable zooming
+            enabled: true,
+
+            // Zooming directions. Remove the appropriate direction to disable 
+            // Eg. 'y' would only allow zooming in the y direction
+            mode: 'xy',
+        }
+    }
+});
+
+
 
 </script>
 
