@@ -5,8 +5,10 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf8">
     <meta name="author" content="Liang Yuyi 2014141463106" />
     <script type="text/javascript" src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript" src="./js/Chart.js"></script>
-    <script type="text/javascript" src="./js/chart.zoom.js"></script>
+    <script type="text/javascript" src="./js/Chart.bundle.js"></script>
+    <script type="text/javascript" src="./js/hammer.js"></script>
+    <script type="text/javascript" src="./js/chartjs-plugin-zoom.js"></script>
+
     <style>
             h2 {
                 border-top: solid cornflowerblue 1px;
@@ -20,12 +22,12 @@
             
             .tab-content {
                 border: solid cornflowerblue 1px;
-                width: 152px;
-                height: 100px;
+                width: 100%;
             }
             
             .tab-content div{
                 display: none;
+                width:75%;
             }
             
             .selected {
@@ -35,7 +37,12 @@
             .tab-content .show{
                 display: block;
             }
-
+            canvas {
+                -moz-user-select: none;
+                -webkit-user-select: none;
+                -ms-user-select: none;
+                height: 100%;
+            }
     </style>
 </head>
 
@@ -47,18 +54,23 @@
         <h2>3</h2>
     </div>
     <div class="tab-content">
-        <div class="show">content1</div>
-        <div>content2</div>
-        <div>content3</div>
+        <div class="show">
+            <canvas id="myChart" ></canvas>
+        </div>
+        <div>
+            <canvas id="myChart2"></canvas>
+        </div>
+
+        <div>
+            <canvas id="myChart3"></canvas>    
+        </div>
     </div>
-    <canvas id="myChart" width="400" height="400"></canvas>
 
 </body>
 <script type="text/javascript">
 //如果只想读取部分数据的话，File对象还有webkitSlice()或mozSlice()方法，用于生成Blob对象。这个对象可以和File对象一样被FileReader读取。这2个方法接收3个参数：第1个参数是起始位置；第2个是结束位置，省略时则读到文件结尾；第3个是content type。例子可以参考《Reading local files in JavaScript》。
 (function() {
     var lwChart = {
-        counterButton: $("#counter"),
         blob: new Blob(),
         reader: new FileReader(),
 
@@ -136,26 +148,63 @@ function tabFcuntion() {
 
 tabFcuntion();
 
+        var randomScalingFactor = function() {
+            return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
+        };
+
+        var scatterChartData = {
+            datasets: [{
+                type: 'line',
+                label: "My First dataset",
+                data: [{
+                    x: 1,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 2,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 3,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 4,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 5,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 6,
+                    y: randomScalingFactor(),
+                }, {
+                    x: 7,
+                    y: randomScalingFactor(),
+                }]
+            }]
+        };
+
+
+
+
+
 
 var ctx = document.getElementById("myChart");
-var myChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-        datasets: [{
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-
-        }]
-    },
+var myChart = Chart.Scatter(ctx, {
+    data: scatterChartData,
     options: {
-        zoom: {
-            // Boolean to enable zooming
+        title: {
+            display: true,
+            text: 'Chart.js Scatter Chart'
+        },
+        pan: {
             enabled: true,
-
-            // Zooming directions. Remove the appropriate direction to disable 
-            // Eg. 'y' would only allow zooming in the y direction
+            mode: 'x'
+        },
+        zoom: {
+            enabled: true,
             mode: 'xy',
+            limits: {
+                max: 10,
+                min: 0.5
+            }
         }
     }
 });
