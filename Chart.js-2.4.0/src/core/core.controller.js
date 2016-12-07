@@ -544,6 +544,7 @@ module.exports = function(Chart) {
 			Chart.plugins.notify('beforeDatasetsDraw', [me, easingDecimal]);
 
 			// Draw each dataset via its respective controller (reversed to support proper line stacking)
+			//画dataset
 			helpers.each(me.data.datasets, function(dataset, datasetIndex) {
 				if (me.isDatasetVisible(datasetIndex)) {
 					me.getDatasetMeta(datasetIndex).controller.draw(ease);

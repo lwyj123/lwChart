@@ -2740,9 +2740,10 @@ module.exports = function(Chart) {
 			Chart.plugins.notify('beforeDraw', [me, easingDecimal]);
 
 			// Draw all the scales
-			//helpers.each(me.boxes, function(box) {
-			//	box.draw(me.chartArea);
-			//}, me);
+			//画坐标轴
+			helpers.each(me.boxes, function(box) {
+				box.draw(me.chartArea);
+			}, me);
 			if (me.scale) {
 				me.scale.draw();
 			}
@@ -2750,6 +2751,7 @@ module.exports = function(Chart) {
 			Chart.plugins.notify('beforeDatasetsDraw', [me, easingDecimal]);
 
 			// Draw each dataset via its respective controller (reversed to support proper line stacking)
+			//画dataset
 			helpers.each(me.data.datasets, function(dataset, datasetIndex) {
 				if (me.isDatasetVisible(datasetIndex)) {
 					me.getDatasetMeta(datasetIndex).controller.draw(ease);
@@ -5728,6 +5730,7 @@ module.exports = function(Chart) {
 		 * @param {Array} [args] extra arguments to apply to the extension call.
 		 * @returns {Boolean} false if any of the plugins return false, else returns true.
 		 */
+		//观察者模式通知观察者“事件”
 		notify: function(extension, args) {
 			var plugins = this._plugins;
 			var ilen = plugins.length;

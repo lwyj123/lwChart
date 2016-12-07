@@ -73,6 +73,7 @@ module.exports = function(Chart) {
 		 * @param {Array} [args] extra arguments to apply to the extension call.
 		 * @returns {Boolean} false if any of the plugins return false, else returns true.
 		 */
+		//观察者模式通知观察者“事件”
 		notify: function(extension, args) {
 			var plugins = this._plugins;
 			var ilen = plugins.length;
