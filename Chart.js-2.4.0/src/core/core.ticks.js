@@ -90,51 +90,6 @@ module.exports = function(Chart) {
 				ticks.push(generationOptions.max !== undefined ? generationOptions.max : niceMax);
 
 				return ticks;
-			},
-
-			/**
-			 * Generate a set of logarithmic ticks
-			 * @method Chart.Ticks.generators.logarithmic
-			 * @param generationOptions {INumericTickGenerationOptions} the options used to generate the ticks
-			 * @param dataRange {IRange} the range of the data
-			 * @returns {Array<Number>} array of tick values
-			 */
-			logarithmic: function(generationOptions, dataRange) {
-				var ticks = [];
-				var getValueOrDefault = helpers.getValueOrDefault;
-
-				// Figure out what the max number of ticks we can support it is based on the size of
-				// the axis area. For now, we say that the minimum tick spacing in pixels must be 50
-				// We also limit the maximum number of ticks to 11 which gives a nice 10 squares on
-				// the graph
-				var tickVal = getValueOrDefault(generationOptions.min, Math.pow(10, Math.floor(helpers.log10(dataRange.min))));
-
-				while (tickVal < dataRange.max) {
-					ticks.push(tickVal);
-
-					var exp;
-					var significand;
-
-					if (tickVal === 0) {
-						exp = Math.floor(helpers.log10(dataRange.minNotZero));
-						significand = Math.round(dataRange.minNotZero / Math.pow(10, exp));
-					} else {
-						exp = Math.floor(helpers.log10(tickVal));
-						significand = Math.floor(tickVal / Math.pow(10, exp)) + 1;
-					}
-
-					if (significand === 10) {
-						significand = 1;
-						++exp;
-					}
-
-					tickVal = significand * Math.pow(10, exp);
-				}
-
-				var lastTick = getValueOrDefault(generationOptions.max, tickVal);
-				ticks.push(lastTick);
-
-				return ticks;
 			}
 		},
 
@@ -185,17 +140,6 @@ module.exports = function(Chart) {
 				}
 
 				return tickString;
-			},
-
-			logarithmic: function(tickValue, index, ticks) {
-				var remain = tickValue / (Math.pow(10, Math.floor(helpers.log10(tickValue))));
-
-				if (tickValue === 0) {
-					return '0';
-				} else if (remain === 1 || remain === 2 || remain === 5 || index === 0 || index === ticks.length - 1) {
-					return tickValue.toExponential();
-				}
-				return '';
 			}
 		}
 	};

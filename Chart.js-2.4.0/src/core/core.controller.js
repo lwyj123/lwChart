@@ -533,6 +533,7 @@ module.exports = function(Chart) {
 			Chart.plugins.notify('beforeDraw', [me, easingDecimal]);
 
 			// Draw all the scales
+			//画坐标轴
 			helpers.each(me.boxes, function(box) {
 				box.draw(me.chartArea);
 			}, me);
