@@ -104,11 +104,19 @@ function handleFiles(files) {
     if (files.length) {
         var file = files[0];
         var reader = new FileReader();
-      
+        var outputdata = new Array();
         reader.onload = function() {
-            $('<pre>' + binstrToDec(this.result) + '</pre>').appendTo('body');
+            var data = this.result;
+            var len = data.length;
+            for(var i = 0; i < data.length; i = i + 2) {
+                outputdata.unshift({
+                    x: i/2,
+                    y: binstrToDec(data.slice(i,i+2))        
+                })
+            }
         }
         reader.readAsBinaryString(file);
+        showData(outputdata);
     }
 }
 
@@ -148,66 +156,47 @@ function tabFcuntion() {
 
 tabFcuntion();
 
-        var randomScalingFactor = function() {
-            return (Math.random() > 0.5 ? 1.0 : -1.0) * Math.round(Math.random() * 100);
-        };
 
-        var scatterChartData = {
-            datasets: [{
-                type: 'line',
-                label: "My First dataset",
-                data: [{
-                    x: 1,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 2,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 3,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 4,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 5,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 6,
-                    y: randomScalingFactor(),
-                }, {
-                    x: 7,
-                    y: randomScalingFactor(),
-                }]
-            }]
-        };
-
-
-
-
-
-
-var ctx = document.getElementById("myChart");
-var myChart = Chart.Scatter(ctx, {
-    data: scatterChartData,
-    options: {
-        title: {
-            display: true,
-            text: 'Chart.js Scatter Chart'
-        },
-        pan: {
-            enabled: true,
-            mode: 'x'
-        },
-        zoom: {
-            enabled: true,
-            mode: 'xy',
-            limits: {
-                max: 10,
-                min: 0.5
+function showData(ChartData) {
+    var ctx = document.getElementById("myChart");
+    var scatterChartData = {
+        datasets: [{
+            type: 'line',
+            label: "My First dataset",
+            data: ChartData
+        }]
+    };
+    var myChart = Chart.Scatter(ctx, {
+        data: scatterChartData,
+        options: {
+            title: {
+                display: true,
+                text: 'Chart.js Scatter Chart'
+            },
+            pan: {
+                enabled: true,
+                mode: 'x'
+            },
+            zoom: {
+                enabled: true,
+                mode: 'xy',
+                limits: {
+                    max: 10,
+                    min: 0.5
+                }
             }
         }
-    }
-});
+    });   
+}
+
+
+
+
+
+
+
+
+
 
 
 
