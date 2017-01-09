@@ -1,1 +1,2 @@
-坐标轴和点的绘制在core.controller的draw里面
+鐢荤偣鍜屽潗鏍囪酱 core.controller閲岄潰鐨刣raw
+

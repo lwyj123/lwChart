@@ -55,54 +55,24 @@
     </div>
     <div class="tab-content">
         <div class="show">
-            <canvas id="myChart" ></canvas>
+            <canvas class="myChart" ></canvas>
         </div>
         <div>
-            <canvas id="myChart2"></canvas>
+            <canvas class="myChart"></canvas>
         </div>
 
         <div>
-            <canvas id="myChart3"></canvas>    
+            <canvas class="myChart"></canvas>    
         </div>
     </div>
 
 </body>
 <script type="text/javascript">
-//如果只想读取部分数据的话，File对象还有webkitSlice()或mozSlice()方法，用于生成Blob对象。这个对象可以和File对象一样被FileReader读取。这2个方法接收3个参数：第1个参数是起始位置；第2个是结束位置，省略时则读到文件结尾；第3个是content type。例子可以参考《Reading local files in JavaScript》。
-(function() {
-    var lwChart = {
-        blob: new Blob(),
-        reader: new FileReader(),
-
-        handleFiles: function(files) {
-            var self = this;
-            if (files.length) {
-                var file = files[0];
-                var reader = new FileReader();
-                if (/text\/\w+/.test(file.type)) {
-                    reader.onload = function() {
-                        $('<pre>' + reader.result + '</pre>').appendTo('body');
-                    }
-                    reader.readAsBinaryString(file);
-                }
-            }
-        },
-        
-
-        bindEvent: function() {
-            var self = this;
-
-        },
-        init: function() {
-            this.bindEvent();
-        }
-    }
-    lwChart.init();
-})();
 
 function handleFiles(files) {
     if (files.length) {
         var file = files[0];
+        var filename = file.name;
         var reader = new FileReader();
         var outputdata = new Array();
         reader.onload = function() {
@@ -116,7 +86,7 @@ function handleFiles(files) {
             }
         }
         reader.readAsBinaryString(file);
-        showData(outputdata);
+        showData(outputdata, filename);
     }
 }
 
@@ -126,14 +96,16 @@ function binstrToDec(binstr) {
         alter('错误的binary string');
         return;
     }
-    var hex = binstr.charCodeAt(0).toString(16) + binstr.charCodeAt(1).toString(16);
+    var hexpart2 = binstr.charCodeAt(1).toString(16)
+    var hex = binstr.charCodeAt(0).toString(16) + (hexpart2.length > 1 ? hexpart2 : '0' + hexpart2 );
     return parseInt(hex, 16);
 
 }
 
 function tabFcuntion() {
-    var tabs = document.getElementsByClassName('tab-head')[0].getElementsByTagName('h2');
-    var contents = document.getElementsByClassName('tab-content')[0].getElementsByTagName('div');
+
+    var tabs = $(".tab-head > h2");
+    var contents = $(".tab-content > div");
 
     (function changeTab(tab) {
         for(var i = 0, len = tabs.length; i < len; i++) {
@@ -157,12 +129,12 @@ function tabFcuntion() {
 tabFcuntion();
 
 
-function showData(ChartData) {
-    var ctx = document.getElementById("myChart");
+//在当前选择的Tab下显示数据
+function showData(ChartData, title) {
+    var ctx = $(".show > .myChart");
     var scatterChartData = {
         datasets: [{
-            type: 'line',
-            label: "My First dataset",
+            label: "dataset",
             data: ChartData
         }]
     };
@@ -171,32 +143,18 @@ function showData(ChartData) {
         options: {
             title: {
                 display: true,
-                text: 'Chart.js Scatter Chart'
+                text: title
             },
             pan: {
                 enabled: true,
-                mode: 'x'
+                threshold: 10
             },
             zoom: {
                 enabled: true,
-                mode: 'xy',
-                limits: {
-                    max: 10,
-                    min: 0.5
-                }
             }
         }
     });   
 }
-
-
-
-
-
-
-
-
-
 
 
 
